@@ -8,11 +8,15 @@ import {fetchEvents} from "../../utils/http";
 export default function NewEventsSection() {
   
   const {data,isLoading,isError,error} = useQuery({
-    queryKey:['events'], // yha perr key ka name kuch bi ly sekty ho ineffects 
-    queryFn:fetchEvents, // return promise
+    queryKey:['events',{max:3}], // yha perr key ka name kuch bi ly sekty ho 
+   // queryFn:({signal}) => fetchEvents({signal,max:3}), // return promise
+
+    //above max:3 is repeating 2 place so we can also used some alyernate with inside queryFn such as below code
+    queryFn:({signal,queryKey}) => fetchEvents({signal,...queryKey[1]}),
+
     //staleTime:0 // And the default is zero, which means  it will use data from the cache, but it will then always also send such  a Behind the Scenes request to get updated data.
 
-     staleTime:5000,
+     staleTime:5000,  
 
     // If you set this to 5,000, for example,
     // it will wait for 5,000 milliseconds before sending another request.
@@ -21,6 +25,25 @@ export default function NewEventsSection() {
     // React Query would not send it if the staleTime is set to 5,000.
     //So that's the staleTime with which you can make sure that no unnecessary requests are sent.
   
+
+    // Stale Time intro
+    //staleTime:10000,  
+    //With that, we're making sure that the cached data is used
+    //without re-fetching it behind the scenes  
+    //if that data is less than 10 seconds old.
+    //And that's perfect here because with that, if I close this,
+    //I reload this page and I now click edit, within 10 seconds
+    //we have one request here
+    //and that's the only request to this URL.
+    
+
+
+
+
+
+
+
+
     // ************************ CACHE TIME**************************************//
     //cacheTime:  1000 // 1 secs or you can defined any time default is 5 min time
                //This controls how long the data and the cache will be kept around.

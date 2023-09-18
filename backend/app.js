@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/events', async (req, res) => {
-  const { max, search } = req.query;
+  const { max, search } = req.query;  // here max = show only limlt some events, not all events
   const eventsFileContent = await fs.readFile('./data/events.json');
   let events = JSON.parse(eventsFileContent);
 
